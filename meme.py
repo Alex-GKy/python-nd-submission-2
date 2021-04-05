@@ -67,10 +67,13 @@ if __name__ == "__main__":
         description='Generate a meme from a picture and inspirational '
                     'quotes. If not arguments are given, default data '
                     'will be used to generate a meme.')
-    parser.add_argument('--body', '-b', help='The quote to be shown on the meme.',
+    parser.add_argument('--body', '-b',
+                        help='The quote to be shown on the meme.',
                         type=str)
-    parser.add_argument('--author', '-a', help='The author of this quote.', type=str)
-    parser.add_argument('--path', '-p', help='The path to the image for the meme.',
+    parser.add_argument('--author', '-a', help='The author of this quote.',
+                        type=str)
+    parser.add_argument('--path', '-p',
+                        help='The path to the image for the meme.',
                         type=str)
 
     args = parser.parse_args()
