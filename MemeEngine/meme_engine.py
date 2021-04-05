@@ -4,6 +4,7 @@ import os
 import pathlib
 import random
 import string
+import textwrap
 
 from PIL import Image
 from PIL import ImageDraw
@@ -55,7 +56,12 @@ class MemeEngine():
         # add text
         font = ImageFont.truetype('./_data/Arial Bold.ttf', 20)
         draw = ImageDraw.Draw(photo)
-        draw.text((new_width / 4, new_height / 4), quote, 'white', font=font)
+
+        margin = 10
+        offset = 10
+        for line in textwrap.wrap(quote, width=photo.size[0]-margin-10):
+            draw.text((margin, offset), line, 'white', font=font)
+            offset += font.getsize(line)[1]
 
         # Generate a random string to make the filename unique - to prevent
         # issues with browser caching
