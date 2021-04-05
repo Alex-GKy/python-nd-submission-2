@@ -1,0 +1,5 @@
+__pycache__
+.pytest_cache
+static
+_data/tmp-file-from-web.jpg
+tmp/
