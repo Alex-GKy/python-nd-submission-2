@@ -19,6 +19,8 @@ class MemeEngine():
         :param output_folder: The folder to which memes are written.
         """
         self.output_path = output_folder
+        self.default_image = './_data/photos/dog/xander_1.jpg'
+
         if not os.path.exists(self.output_path):
             os.makedirs(output_folder)
 
@@ -35,13 +37,22 @@ class MemeEngine():
         """
         # resize the image
         new_width = 500
-        photo = Image.open(img_path)
-        new_height = self.determine_height(photo.size[0], photo.size[1],
+
+        try:
+            photo = Image.open(img_path)
+
+            new_height = self.determine_height(photo.size[0], photo.size[1],
                                            new_width)
-        photo.thumbnail((new_width, new_height))
+            photo.thumbnail((new_width, new_height))
+            quote = f'{text}\n- {author}'
+
+        except Exception as e:
+            print('Something went wrong fetching the picture')
+            photo = Image.open(self.default_image)
+            quote = f'Something went wrong, sorry...'
+            new_height = 500
 
         # add text
-        quote = f'{text}\n- {author}'
         font = ImageFont.truetype('./_data/Arial Bold.ttf', 20)
         draw = ImageDraw.Draw(photo)
         draw.text((new_width / 4, new_height / 4), quote, 'white', font=font)
