@@ -1,11 +1,11 @@
 """Extract data from various file types, such as txt, pdf, csv, and docx."""
-import csv
 import pathlib
 import subprocess
 from abc import ABC, abstractmethod
 from typing import List
 
 import docx
+import pandas
 
 from .quoteModel import QuoteModel
 
@@ -71,11 +71,18 @@ class CSVIngestor(IngestorInterface):
         check_exception(cls, path)
 
         quotes = list()
-        with open(path, 'r') as infile:
-            reader = csv.DictReader(infile)
+        df = pandas.read_csv(path)
 
-            for row in reader:
-                quotes.append(QuoteModel(row['author'], row['body']))
+        for index, row in df.iterrows():
+            quotes.append(QuoteModel(row['author'], row['body']))
+
+
+        # with open(path, 'r') as infile:
+        #     reader = pandas.read_csv(infile, index_col=0)
+        #     # reader = csv.DictReader(infile)
+        #
+        #     for row in reader:
+        #         quotes.append(QuoteModel(row['author'], row['body']))
 
         return quotes
 
