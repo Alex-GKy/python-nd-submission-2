@@ -22,3 +22,6 @@ class QuoteModel():
             return True
         else:
             return False
+
+    def __repr__(self):
+        print (f'\"{self.body}\" - {self.author}')

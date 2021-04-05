@@ -28,6 +28,8 @@ class TestQuery(unittest.TestCase):
         cls.pdf_quote1 = QuoteModel('Bark Twain',
                                     'It\'s the size of the fight in the dog')
 
+        cls.csv_quote1.__repr__()
+
     def test_nothing(self):
         expected = 1
         self.assertEqual(expected, 1)
