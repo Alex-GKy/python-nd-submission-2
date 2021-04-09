@@ -24,4 +24,5 @@ class QuoteModel():
             return False
 
     def __repr__(self):
+        """Print a machine-readable description of this model."""
         print (f'\"{self.body}\" - {self.author}')

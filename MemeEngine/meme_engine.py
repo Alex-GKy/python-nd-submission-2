@@ -1,11 +1,11 @@
 """Generate Memes from pictures and quotes."""
 
+import math
 import os
 import pathlib
 import random
 import string
 import textwrap
-import math
 
 from PIL import Image
 from PIL import ImageDraw
@@ -44,7 +44,7 @@ class MemeEngine():
             photo = Image.open(img_path)
 
             new_height = self.determine_height(photo.size[0], photo.size[1],
-                                           new_width)
+                                               new_width)
             photo.thumbnail((new_width, new_height))
 
         except Exception as e:
@@ -61,10 +61,11 @@ class MemeEngine():
         offset = 10
 
         # get the size of one letter in width
-        letter_size = int( font.getsize(body)[0] / len(body) )
+        letter_size = int(font.getsize(body)[0] / len(body))
 
         # calculate the max amount of letters in one line:
-        line_length = math.floor(photo.size[0] / letter_size) - math.floor(margin/letter_size)
+        line_length = math.floor(photo.size[0] / letter_size) - math.floor(
+            margin / letter_size)
         line_length = line_length * 0.9
 
         # write line by line
@@ -73,12 +74,11 @@ class MemeEngine():
         #     offset += font.getsize(line)[1]
 
         for line in textwrap.wrap(body, line_length):
-
             draw.text((margin, offset), line, 'white', font=font)
             offset += font.getsize(line)[1]
 
         # add the author
-        draw.text((margin,offset), f'- {author}', 'white', font=font)
+        draw.text((margin, offset), f'- {author}', 'white', font=font)
 
         # Generate a random string to make the filename unique - to prevent
         # issues with browser caching
@@ -87,9 +87,9 @@ class MemeEngine():
 
         # save
         out_path = os.path.join(self.output_path,
-                               pathlib.Path(img_path).stem +
-                               '_meme_' + rand_string +
-                               pathlib.Path(img_path).suffix)
+                                pathlib.Path(img_path).stem +
+                                '_meme_' + rand_string +
+                                pathlib.Path(img_path).suffix)
 
         if os.path.exists(out_path):
             os.remove(out_path)
@@ -102,30 +102,6 @@ class MemeEngine():
             photo.close()
 
         return out_path
-
-    @classmethod
-    def wrap_text(cls, quote, photo, draw, font, outpath):
-
-        quote = f'{quote.body}\n- {quote.author}'
-
-        margin = 10
-        offset = 10
-
-        # get the size of one letter in width
-        letter_size = int( font.getsize(quote)[0] / len(quote) )
-
-        # calculate the max amount of letters in one line:
-        line_length = math.floor(photo.size[0] / letter_size) - math.floor(margin/letter_size)
-        line_length = line_length * 0.9
-
-        for line in textwrap.wrap(quote, line_length):
-
-            draw.text((margin, offset), line, 'white', font=font)
-            offset += font.getsize(line)[1]
-
-        return draw
-        # photo.save(outpath)
-
 
     @classmethod
     def determine_height(cls, original_width: int, original_height: int,
