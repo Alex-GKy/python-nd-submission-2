@@ -1,10 +1,15 @@
 import os
 import pathlib
 import unittest
+import importlib
 
 from MemeEngine import MemeEngine
 from PIL import Image
 from QuoteEngine import QuoteModel
+
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
 TESTS_ROOT = (pathlib.Path(__file__).parent).resolve()
 TEST_DATA = TESTS_ROOT / 'test_data'
@@ -40,3 +45,30 @@ class TestQuery(unittest.TestCase):
         # clean up
         generated_meme.close()
         os.remove(result)
+
+    def test_text_wrap(self):
+
+        text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ' \
+               'sed do eiusmod tempor incididunt ut labore et dolore magna ' \
+               'aliqua. Ut enim ad minim veniam, quis nostrud exercitation ' \
+               'ullamco laboris nisi ut aliquip ex ea commodo consequat. ' \
+               'Duis aute irure dolor in reprehenderit in voluptate velit ' \
+               'esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ' \
+               'occaecat cupidatat non proident, sunt in culpa qui officia ' \
+               'deserunt mollit anim id est laborum.'
+
+        quote = QuoteModel('Author', text)
+
+        me = MemeEngine('./tmp')
+
+        img_path = TEST_DATA / 'Photos/xander_1.jpg'
+
+        photo = Image.open(img_path)
+        font = ImageFont.truetype('./_data/Arial Bold.ttf', 20)
+        draw = ImageDraw.Draw(photo)
+        outpath = TEST_DATA / './tmp/wrapped-text.jpg'
+
+        draw = MemeEngine.wrap_text(quote, photo, draw, font, outpath)
+
+
+        photo.save(outpath)

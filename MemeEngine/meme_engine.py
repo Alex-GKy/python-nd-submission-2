@@ -5,6 +5,7 @@ import pathlib
 import random
 import string
 import textwrap
+import math
 
 from PIL import Image
 from PIL import ImageDraw
@@ -59,6 +60,15 @@ class MemeEngine():
 
         margin = 10
         offset = 10
+
+        # get the size of one letter in width
+        letter_size = int( font.getsize(quote)[0] / len(quote) )
+
+        # calculate the max amount of letters in one line:
+        line_length = math.floor(photo.size[0] / letter_size) - math.floor(margin/letter_size)
+        line_length = line_length * 0.9
+
+        #write line by line
         for line in textwrap.wrap(quote, width=photo.size[0]-margin-10):
             draw.text((margin, offset), line, 'white', font=font)
             offset += font.getsize(line)[1]
@@ -85,6 +95,30 @@ class MemeEngine():
             photo.close()
 
         return outpath
+
+    @classmethod
+    def wrap_text(cls, quote, photo, draw, font, outpath):
+
+        quote = f'{quote.body}\n- {quote.author}'
+
+        margin = 10
+        offset = 10
+
+        # get the size of one letter in width
+        letter_size = int( font.getsize(quote)[0] / len(quote) )
+
+        # calculate the max amount of letters in one line:
+        line_length = math.floor(photo.size[0] / letter_size) - math.floor(margin/letter_size)
+        line_length = line_length * 0.9
+
+        for line in textwrap.wrap(quote, line_length):
+
+            draw.text((margin, offset), line, 'white', font=font)
+            offset += font.getsize(line)[1]
+
+        return draw
+        # photo.save(outpath)
+
 
     @classmethod
     def determine_height(cls, original_width: int, original_height: int,
